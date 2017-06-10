@@ -18,5 +18,11 @@ class TANKGAME_API ATankPlayerController : public APlayerController
 public:
 	ATank* GetContolledTank() const;
 	
-	
+	void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+private:
+	// start the tank moving the turret and the barrel towards the crosshair
+	void AimTowardsCrosshair();
 };
