@@ -2,27 +2,44 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Tank.h"
+#include "Engine.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-/**
- * 
- */
+class ATank;
+
 UCLASS()
 class TANKGAME_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
 public:
-	ATank* GetContolledTank() const;
-	
-	void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aim")
+	float CrosshairXLocation = 0.5;
 
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aim")
+	float CrosshairYLocation = 0.4;
+
+	ATank* GetControlledTank() const;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Aim")
+	float LineTraceRange = 1000000;
+	
+	//  Called when the game starts or when spawned
+	void BeginPlay() override;
+
+	// Caled every frame
+	virtual void Tick(float DeltaTime) override;
+
 	// start the tank moving the turret and the barrel towards the crosshair
 	void AimTowardsCrosshair();
+
+	// return and out parameter, true i fhit landscape
+	bool GetSightRayHitLocation( FVector&  OutLocation) const;
+
+	bool GetlookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
+
+	bool GetLookVectorHitLocation( FVector LookDirection, FVector& HitLocation) const;
+
 };
